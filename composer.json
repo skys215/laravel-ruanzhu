@@ -1,5 +1,5 @@
 {
-    "name": "skys215\/ruanzhu",
+    "name": "skys215/ruanzhu",
     "description": "Ruanzhu generator for Laravel project.",
     "license": "MIT",
     "authors": [
@@ -8,10 +8,19 @@
             "email": "skys215@gmail.com"
         }
     ],
-    "require": {},
+    "require": {
+        "phpoffice/phpword": "v0.18.*"
+    },
     "autoload": {
         "psr-4": {
-            "Skys215\\Ruanzhu\\": "src"
+            "Ruanzhu\\": "src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "\\Ruanzhu\\RuanzhuServiceProvider"
+            ]
         }
     }
 }
