@@ -1,0 +1,17 @@
+{
+    "name": "skys215\/ruanzhu",
+    "description": "Ruanzhu generator for Laravel project.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "skys215",
+            "email": "skys215@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Skys215\\Ruanzhu\\": "src"
+        }
+    }
+}
