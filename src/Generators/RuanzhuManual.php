@@ -16,7 +16,7 @@ class RuanzhuManual extends Command
      * @var string
      */
     protected $signature = 'ruanzhu:manual
-        {-t|--title=软件著作权程序鉴别材料生成器V1.0 : 软件名称+版本号，默认为软件著作权程序鉴别材料生成器V1.0，此名称用于生成页眉}
+        {-t|--title : 软件名称+版本号，默认为软件著作权程序鉴别材料生成器V1.0，此名称用于生成页眉}
         {--path=tests/Browser/screenshots : 截图保存路径}
         {--output=manual.docx : 保存文件名}
     ';
@@ -89,6 +89,11 @@ class RuanzhuManual extends Command
      */
     public function handle()
     {
+        $title = $this->option('title');
+        if (!$title) {
+            $title = config('app.name');
+        }
+
         // prepare doc
         $phpWord = new PhpWord();
         $phpWord->setDefaultFontName($this->settings['font-name']);
@@ -99,7 +104,7 @@ class RuanzhuManual extends Command
 
         // 页眉标注软著名称及版本号,并在右上角标注页码
         $header = $section->addHeader();
-        $header->addPreserveText($this->option('title'), null, ['alignment' => Jc::CENTER]);
+        $header->addPreserveText($title, null, ['alignment' => Jc::CENTER]);
         $header->addPreserveText('{PAGE}/{NUMPAGES}', null, ['alignment' => Jc::RIGHT]);
 
         $path = base_path($this->option('path'));
@@ -138,7 +143,7 @@ class RuanzhuManual extends Command
         $rand = rand(0, count($this->texts['login'])-1);
         $text = $this->texts['login'][$rand];
         $modules = array_map(function($item){
-            return __('models/'.$item.'.menus.backend.main');
+            return __('models/'.$item.'.plural');
         }, $models);
         $text = str_replace('{$modules}', implode('、',$modules), $text);
 
@@ -185,7 +190,7 @@ class RuanzhuManual extends Command
                 ];
                 $key = 'list-'.$action;
                 $rand = rand(0,count($this->texts[$key])-1);
-                $text = str_replace('{$module_name}', __('models/'.$model.'.menus.backend.main'), $this->texts[$key][$rand]);
+                $text = str_replace('{$module_name}', __('models/'.$model.'.plural'), $this->texts[$key][$rand]);
                 $section->addText($text);
                 $section->addImage($fullpath, $settings);
                 $section->addTextBreak();
@@ -198,4 +203,3 @@ class RuanzhuManual extends Command
         return true;
     }
 }
-

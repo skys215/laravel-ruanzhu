@@ -28,7 +28,7 @@ class RuanzhuDoc extends Command
      */
     public function handle()
     {
-        Artisan::call('ruanzhu::code');
-        Artisan::call('ruanzhu::manual');
+        Artisan::call('ruanzhu:code');
+        Artisan::call('ruanzhu:manual');
     }
 }

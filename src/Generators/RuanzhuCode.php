@@ -15,7 +15,7 @@ class RuanzhuCode extends Command
      * @var string
      */
     protected $signature = 'ruanzhu:code
-        {-t|--title=软件著作权程序鉴别材料生成器V1.0 : 软件名称+版本号，默认为软件著作权程序鉴别材料生成器V1.0，此名称用于生成页眉}
+        {-t|--title : 软件名称+版本号，默认为项目名称，此名称用于生成页眉}
         {-i|--indir|--indirs=app/ : 源码所在文件夹，可以指定多个，默认为当前目录}
         {-e|--ext|--exts=php : 源代码后缀，可以指定多个，默认为PHP源代码}
         {--font-name=宋体 : 字体，默认为宋体}
@@ -84,7 +84,9 @@ class RuanzhuCode extends Command
         $this->settings['font-name'] = $this->option('font-name');
         $this->settings['font-size'] = $this->option('font-size');
         $this->settings['line-spacing'] = $this->option('line-spacing');
-        $this->title = $this->option('title');
+        if (!$this->title = $this->option('title')) {
+            $this->title = config('app.name');
+        }
 
         $output = $this->option('outfile');
         if (file_exists(realpath('./'.$output))) {
@@ -210,4 +212,3 @@ class RuanzhuCode extends Command
         return $matchedFiles;
     }
 }
-
