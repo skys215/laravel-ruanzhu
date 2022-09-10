@@ -30,5 +30,6 @@ class RuanzhuDoc extends Command
     {
         Artisan::call('ruanzhu:code');
         Artisan::call('ruanzhu:manual');
+        Artisan::call('ruanzhu:env');
     }
 }

@@ -4,6 +4,7 @@ namespace Ruanzhu;
 
 use Illuminate\Support\ServiceProvider;
 use Ruanzhu\Generators\RuanzhuCode;
+use Ruanzhu\Generators\RuanzhuEnv;
 use Ruanzhu\Generators\RuanzhuDoc;
 use Ruanzhu\Generators\RuanzhuManual;
 
@@ -18,9 +19,9 @@ class RuanzhuServiceProvider extends ServiceProvider
 
         $this->commands([
             RuanzhuDoc::class,
+            RuanzhuEnv::class,
             RuanzhuCode::class,
             RuanzhuManual::class,
         ]);
     }
 }
-
