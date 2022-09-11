@@ -19,7 +19,7 @@ class RuanzhuDoc extends Command
      *
      * @var string
      */
-    protected $description = 'Generate docs for software copyrighti, including code and manual.';
+    protected $description = 'Generate docs for software copyright, including code, env and manual.';
 
     /**
      * Execute the console command.
