@@ -12,16 +12,32 @@ class RuanzhuServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        // Register commands
-        if (!$this->app->runningInConsole()) {
+        // Publish config files
+        if ($this->app->runningInConsole()) {
+            $configPath = __DIR__.'/../config/ruanzhu.php';
+            $this->publishes([
+                $configPath => config_path('ruanzhu.php'),
+            ], 'ruanzhu-config');
+
+            // Register commands
+            $this->commands([
+                RuanzhuDoc::class,
+                RuanzhuEnv::class,
+                RuanzhuCode::class,
+                RuanzhuManual::class,
+            ]);
+
             return;
         }
+    }
 
-        $this->commands([
-            RuanzhuDoc::class,
-            RuanzhuEnv::class,
-            RuanzhuCode::class,
-            RuanzhuManual::class,
-        ]);
+    /**
+     * Register the application services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        $this->mergeConfigFrom(__DIR__.'/../config/ruanzhu.php', 'ruanzhu');
     }
 }
