@@ -145,7 +145,11 @@ class RuanzhuManual extends Command
 
             foreach ($this->model_actions as $action) {
                 $filename = $model_name.'-'.$action.'.png';
-                $fullpath = realpath($path.DIRECTORY_SEPARATOR.$filename);
+                $fullpath = $path.DIRECTORY_SEPARATOR.$filename;
+                if (!file_exists($fullpath)){
+                    $this->warn('File '.$fullpath.' doesn\'t exists. Skipping');
+                    break;
+                }
                 list($width, $height) = getimagesize($fullpath);
                 $rate = 0.3;
                 $settings = [
@@ -164,6 +168,8 @@ class RuanzhuManual extends Command
 
         $objWriter = IOFactory::createWriter($phpWord);
         $objWriter->save($output);
+
+        $this->info('Done generating ruanzhu manual.');
 
         return true;
     }

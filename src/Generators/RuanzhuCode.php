@@ -145,6 +145,7 @@ class RuanzhuCode extends Command
 
         $objWriter = IOFactory::createWriter($phpWord);
         $objWriter->save($this->output);
+        $this->info('Done generating ruanzhu code.');
 
         return true;
     }

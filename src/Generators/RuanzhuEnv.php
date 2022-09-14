@@ -193,6 +193,8 @@ class RuanzhuEnv extends Command
             fwrite($file, $text);
         }
         fclose($file);
+
+        $this->info('Done generating ruanzhu env.');
     }
 
     protected function generateDevHardwareEnv()
