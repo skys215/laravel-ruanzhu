@@ -52,7 +52,7 @@ class RuanzhuCode extends Command
 
     protected $title = '';
 
-    protected $output = 'code.docx';
+    protected $outfile = 'code.docx';
 
     protected $maxLines = 3500;
 
@@ -88,12 +88,12 @@ class RuanzhuCode extends Command
             $this->title = config('app.name');
         }
 
-        $output = $this->option('outfile');
-        if (file_exists(realpath('./'.$output))) {
-            $this->error($output.'已存在。');
+        $outfile = $this->option('outfile');
+        if (file_exists(realpath('./'.$outfile))) {
+            $this->error($outfile.'已存在。');
             return false;
         }
-        $this->output = $output;
+        $this->outfile = $outfile;
 
         foreach ($this->excludes as &$exclude) {
             $exclude = base_path($exclude);
@@ -144,7 +144,7 @@ class RuanzhuCode extends Command
         }
 
         $objWriter = IOFactory::createWriter($phpWord);
-        $objWriter->save($this->output);
+        $objWriter->save($this->outfile);
         $this->info('Done generating ruanzhu code.');
 
         return true;
