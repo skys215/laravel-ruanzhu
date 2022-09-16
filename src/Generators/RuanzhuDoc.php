@@ -28,8 +28,8 @@ class RuanzhuDoc extends Command
      */
     public function handle()
     {
-        Artisan::call('ruanzhu:code');
-        Artisan::call('ruanzhu:manual');
-        Artisan::call('ruanzhu:env');
+        $this->call('ruanzhu:code');
+        $this->call('ruanzhu:manual');
+        $this->call('ruanzhu:env');
     }
 }
