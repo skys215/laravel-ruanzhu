@@ -85,7 +85,7 @@ class RuanzhuManual extends Command
                 continue;
             }
 
-            $models[] = Str::snake(Str::plural(rtrim($filename,'.json')));
+            $models[] = Str::snake(Str::plural(str_replace('.json', '', $filename)));
         }
 
         // browse
