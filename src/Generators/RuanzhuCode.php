@@ -66,7 +66,7 @@ class RuanzhuCode extends Command
         if (!$this->title = $this->option('title')) {
             $this->title = config('app.name');
         }
-        $this->info('开始生成软著代码文档 '.$this->title);
+        $this->comment('开始生成软著代码文档 '.$this->title);
 
         if ($this->hasOption('indirs')) {
             $this->paths = explode(',',$this->option('indirs'));
@@ -104,7 +104,7 @@ class RuanzhuCode extends Command
         $this->excludes = array_flip($this->excludes);
         $this->generateDoc();
 
-        $this->success('软著代码文档生成结束');
+        $this->info('软著代码文档生成结束');
     }
 
     public function generateDoc()
@@ -150,7 +150,6 @@ class RuanzhuCode extends Command
 
         $objWriter = IOFactory::createWriter($phpWord);
         $objWriter->save($this->outfile);
-        $this->info('Done generating ruanzhu code.');
 
         return true;
     }
