@@ -41,7 +41,7 @@ class RuanzhuCode extends Command
     ];
 
     protected $excludes = [
-        'app/Console/Commands/GenerateDoc.php',
+        //
     ];
 
     protected $settings = [
@@ -63,6 +63,11 @@ class RuanzhuCode extends Command
      */
     public function handle()
     {
+        if (!$this->title = $this->option('title')) {
+            $this->title = config('app.name');
+        }
+        $this->info('开始生成软著代码文档 '.$this->title);
+
         if ($this->hasOption('indirs')) {
             $this->paths = explode(',',$this->option('indirs'));
         }
@@ -84,9 +89,7 @@ class RuanzhuCode extends Command
         $this->settings['font-name'] = $this->option('font-name');
         $this->settings['font-size'] = $this->option('font-size');
         $this->settings['line-spacing'] = $this->option('line-spacing');
-        if (!$this->title = $this->option('title')) {
-            $this->title = config('app.name');
-        }
+
 
         $outfile = $this->option('outfile');
         if (file_exists(realpath('./'.$outfile))) {
@@ -100,6 +103,8 @@ class RuanzhuCode extends Command
         }
         $this->excludes = array_flip($this->excludes);
         $this->generateDoc();
+
+        $this->success('软著代码文档生成结束');
     }
 
     public function generateDoc()

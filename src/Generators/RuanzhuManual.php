@@ -56,6 +56,7 @@ class RuanzhuManual extends Command
         if (!$title) {
             $title = config('app.name');
         }
+        $this->info('开始生成软著手册 '.$title);
 
         $this->texts = config('ruanzhu');
 
@@ -169,7 +170,7 @@ class RuanzhuManual extends Command
         $objWriter = IOFactory::createWriter($phpWord);
         $objWriter->save($output);
 
-        $this->info('Done generating ruanzhu manual.');
+        $this->success('软著手册生成结束');
 
         return true;
     }

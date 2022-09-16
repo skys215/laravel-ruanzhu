@@ -169,6 +169,7 @@ class RuanzhuEnv extends Command
         if (!$this->hasOption('title')){
             $title = config('app.name');
         }
+        $this->info('开始生成软著运行环境 '.$this->title);
 
         $out = $this->option('outfile');
 
@@ -194,7 +195,7 @@ class RuanzhuEnv extends Command
         }
         fclose($file);
 
-        $this->info('Done generating ruanzhu env.');
+        $this->success('运行环境文件生成结束');
     }
 
     protected function generateDevHardwareEnv()
