@@ -120,7 +120,9 @@ class RuanzhuEnv extends Command
         'dev-soft' => [
             'SublimeText 3',
             'SublimeText 4',
-            'PhpStorm',
+            'PhpStorm 2022',
+            'PhpStorm 2021',
+            'PhpStorm 2020',
             'Visual Studio Code',
             'VS Code',
             'EMEditor',
@@ -188,6 +190,9 @@ class RuanzhuEnv extends Command
             'generatePurpose',
             'generateIndustry',
         ];
+        $appname = '软件名称：'.$title."\n\n";
+
+        fwrite($file, $appname);
         foreach ($this->items as $key => $item) {
             $text = ($key+1).'、'.$item.'：'.($this->{$func[$key]}()).'；';
             $text .= "\n\n";
