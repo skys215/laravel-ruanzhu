@@ -15,14 +15,15 @@ class RuanzhuCode extends Command
      * @var string
      */
     protected $signature = 'ruanzhu:code
-        {-t|--title : 软件名称+版本号，默认为项目名称，此名称用于生成页眉}
-        {-i|--indir|--indirs=app/ : 源码所在文件夹，可以指定多个，默认为当前目录}
-        {-e|--ext|--exts=php : 源代码后缀，可以指定多个，默认为PHP源代码}
+        {--t|--title : 软件名称+版本号，默认为项目名称，此名称用于生成页眉}
+        {--i|--indirs=app/,vendor/,resources/views/ : 源码所在文件夹，可以指定多个，默认为当前目录}
+        {--e|--exts=php : 源代码后缀，可以指定多个，默认为PHP源代码}
         {--font-name=宋体 : 字体，默认为宋体}
         {--font-size=10.5 : 字号，默认为五号，即10.5号}
         {--line-spacing=1.0 : 行距，默认为固定值10.5}
-        {-x|--exclude|--excludes : 需要排除的文件或路径，可以指定多个}
-        {-o|--outfile=code.docx : 输出文件（docx格式），默认为当前目录的code.docx}
+        {--x|--excludes : 需要排除的文件或路径，可以指定多个}
+        {--o|--outfile=code.docx : 输出文件（docx格式），默认为当前目录的code.docx}
+        {--f|--force : 删除已存在的文件}
     ';
 
     /**
@@ -41,7 +42,8 @@ class RuanzhuCode extends Command
     ];
 
     protected $excludes = [
-        //
+        'vendor/composer/',
+        'vendor/autoload.php',
     ];
 
     protected $settings = [
@@ -54,7 +56,7 @@ class RuanzhuCode extends Command
 
     protected $outfile = 'code.docx';
 
-    protected $maxLines = 3500;
+    protected $maxLines = 5000;
 
     /**
      * Execute the console command.
@@ -68,11 +70,11 @@ class RuanzhuCode extends Command
         }
         $this->comment('开始生成软著代码文档 '.$this->title);
 
-        if ($this->hasOption('indirs')) {
+        if ($this->option('indirs')) {
             $this->paths = explode(',',$this->option('indirs'));
         }
 
-        if ($this->hasOption('exts')) {
+        if ($this->option('exts')) {
             $this->extensions = explode(',', $this->option('exts'));
         }
 
@@ -91,17 +93,23 @@ class RuanzhuCode extends Command
         $this->settings['line-spacing'] = $this->option('line-spacing');
 
 
-        $outfile = $this->option('outfile');
-        if (file_exists(realpath('./'.$outfile))) {
-            $this->error($outfile.'已存在。');
-            return false;
+        $outfilename = $this->option('outfile');
+        $outfile = base_path($outfilename);
+        if (file_exists($outfile)){
+            if (!$this->option('force'))
+            {
+                $this->error($outfilename.'已存在。');
+                return false;
+            }
+            unlink($outfile);
         }
+
         $this->outfile = $outfile;
 
         foreach ($this->excludes as &$exclude) {
             $exclude = base_path($exclude);
         }
-        $this->excludes = array_flip($this->excludes);
+
         $this->generateDoc();
 
         $this->info('软著代码文档生成结束');
@@ -122,6 +130,7 @@ class RuanzhuCode extends Command
 
         // 第一步，查找代码文件
         $files = $this->findCode($this->paths, $this->excludes, $this->extensions);
+        shuffle($files);
 
         $totalLines = 0;
         // 页眉标注软著名称及版本号,并在右上角标注页码
@@ -131,6 +140,10 @@ class RuanzhuCode extends Command
 
         // 第二步，逐个把代码文件写入到docx中
         foreach ($files as $file) {
+            if ($this->matchExclude($file)) {
+                continue;
+            }
+
             if ($totalLines > $this->maxLines) {
                 break;
             }
@@ -159,21 +172,19 @@ class RuanzhuCode extends Command
         $files = [];
         foreach ($paths as $path) {
             $path = base_path($path);
-            //不符合的一级文件夹在这里排除
-            if (!$this->matchFolders($path, $excludes)) {
-                continue;
-            }
             $files = array_merge($files, $this->scanFiles($path, $excludes, $exts));
         }
         return $files;
     }
 
-    protected function matchFolders($path, $excludes): bool
+    protected function matchExclude($path)
     {
-        if (isset($excludes[$path])) {
-            return false;
+        foreach($this->excludes as $ex){
+            if (Str::startsWith($path, $ex)){
+                return true;
+            }
         }
-        return true;
+        return false;
     }
 
     protected function matchExtensions($path, $exts)
