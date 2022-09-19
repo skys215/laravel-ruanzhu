@@ -16,7 +16,7 @@ class RuanzhuCode extends Command
      */
     protected $signature = 'ruanzhu:code
         {--t|--title : 软件名称+版本号，默认为项目名称，此名称用于生成页眉}
-        {--i|--indirs=app/,vendor/,resources/views/ : 源码所在文件夹，可以指定多个，默认为当前目录}
+        {--i|--indirs=app/,resources/views/,vendor/ : 源码所在文件夹，可以指定多个，默认为当前目录}
         {--e|--exts=php : 源代码后缀，可以指定多个，默认为PHP源代码}
         {--font-name=宋体 : 字体，默认为宋体}
         {--font-size=10.5 : 字号，默认为五号，即10.5号}
@@ -39,6 +39,8 @@ class RuanzhuCode extends Command
 
     protected $paths = [
         'app/',
+        'resources/views/',
+        'vendor/',
     ];
 
     protected $excludes = [
@@ -76,6 +78,9 @@ class RuanzhuCode extends Command
 
         if ($this->option('exts')) {
             $this->extensions = explode(',', $this->option('exts'));
+        }
+        if ($this->option('excludes')) {
+            $this->excludes = explode(',', $this->option('excludes'));
         }
 
         if ($this->option('font-size')<1.0) {
