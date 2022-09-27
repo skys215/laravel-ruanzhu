@@ -21,6 +21,7 @@ class RuanzhuCode extends Command
         {--font-name=宋体 : 字体，默认为宋体}
         {--font-size=10.5 : 字号，默认为五号，即10.5号}
         {--line-spacing=1.0 : 行距，默认为固定值10.5}
+        {--line-numbering : 是否显示行号}
         {--x|--excludes : 需要排除的文件或路径，可以指定多个}
         {--o|--outfile=code.docx : 输出文件（docx格式），默认为当前目录的code.docx}
         {--f|--force : 删除已存在的文件}
@@ -52,6 +53,7 @@ class RuanzhuCode extends Command
         'font-size' => '10.5',
         'font-name' => '宋体',
         'line-spacing' => '1.0',
+        'line-numbering' => false,
     ];
 
     protected $title = '';
@@ -93,6 +95,10 @@ class RuanzhuCode extends Command
             return;
         }
 
+        if ($this->hasOption('line-numbering')) {
+            $this->settings['line-numbering'] = $this->option('line-numbering');
+        }
+
         $this->settings['font-name'] = $this->option('font-name');
         $this->settings['font-size'] = $this->option('font-size');
         $this->settings['line-spacing'] = $this->option('line-spacing');
@@ -129,6 +135,10 @@ class RuanzhuCode extends Command
         $settings = [
             'lineHeight' => $this->settings['line-spacing'],
         ];
+
+        if ($this->settings['line-numbering']) {
+            $settings['lineNumbering'] = ['restart' => 'continuous'];
+        }
         $phpWord->setDefaultParagraphStyle($settings);
 
         $section = $phpWord->addSection($settings);
